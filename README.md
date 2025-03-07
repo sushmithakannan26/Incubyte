@@ -1,4 +1,4 @@
-# Incubyte Automation Assessment Task
+# Incubyte Automation Assessment Task (BDD + POM)
 
 # Feature File
 
@@ -172,3 +172,100 @@ public class BaseClass {
     }
 }
 
+# Step Definitions
+
+package stepDefinitions;
+
+import io.cucumber.java.en.*;
+import org.openqa.selenium.WebDriver;
+import pages.HomePage;
+import pages.LoginPage;
+import pages.RegisterPage;
+import utils.BaseClass;
+
+public class RegisterSteps {
+    WebDriver driver;
+    HomePage homePage;
+    RegisterPage registerPage;
+    LoginPage loginPage;
+
+    @Given("User is on the home page")
+    public void user_is_on_home_page() {
+        BaseClass.initializeDriver();
+        driver = BaseClass.driver;
+        driver.get("https://magento.softwaretestingboard.com/");
+        homePage = new HomePage(driver);
+    }
+
+    @When("User navigates to the Registration page")
+    public void user_navigates_to_registration_page() {
+        homePage.clickCreateAccount();
+        registerPage = new RegisterPage(driver);
+    }
+
+    @When("User enters valid registration details")
+    public void user_enters_registration_details() {
+        registerPage.enterFirstName("Sushmitha");
+        registerPage.enterLastName("M K");
+        registerPage.enterEmail("sushmithamk9295@gmail.com");
+        registerPage.enterPassword("Jull@2612");
+    }
+
+    @When("User submits the registration form")
+    public void user_submits_registration_form() {
+        registerPage.clickCreateAccount();
+    }
+
+    @Then("User should see the account creation confirmation page")
+    public void user_sees_confirmation_page() {
+        System.out.println("Account Created Successfully!!!");
+        BaseClass.tearDown();
+    }
+
+    @Given("User is on the login page")
+    public void user_is_on_login_page() {
+        BaseClass.initializeDriver();
+        driver = BaseClass.driver;
+        driver.get("https://magento.softwaretestingboard.com/customer/account/login/");
+        loginPage = new LoginPage(driver);
+    }
+
+    @When("User enters valid credentials")
+    public void user_enters_valid_credentials() {
+        loginPage.enterEmail("sushmithamk9295@gmail.com");
+        loginPage.enterPassword("Jull@2612");
+    }
+
+    @When("User submits the login form")
+    public void user_submits_login_form() {
+        loginPage.clickSignIn();
+    }
+
+    @Then("User should be logged in successfully")
+    public void user_logged_in_successfully() {
+        System.out.println("Account Signed In Successfully!!!");
+        BaseClass.tearDown();
+    }
+}
+
+# Runner Class
+
+package runner;
+
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+import org.junit.runner.RunWith;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(
+        features = "src/test/java/features",
+        glue = "stepDefinitions",
+        plugin = {
+        		"pretty", 
+        		"html:target/cucumber-reports.html", 
+        		"json:target/cucumber-reports/cucumber.json"
+        		},
+        monochrome = true
+)
+public class TestRunner {
+}
