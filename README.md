@@ -108,3 +108,67 @@ public class RegisterPage {
     }
 }
     
+3. Login Page
+
+   package pages;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class LoginPage {
+    WebDriver driver;
+
+    @FindBy(id = "email")
+    WebElement email;
+
+    @FindBy(id = "pass")
+    WebElement password;
+
+    @FindBy(id = "send2")
+    WebElement signInButton;
+
+    public LoginPage(WebDriver driver) {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
+    public void enterEmail(String emailText) {
+        email.sendKeys(emailText);
+    }
+
+    public void enterPassword(String pwd) {
+        password.sendKeys(pwd);
+    }
+
+    public void clickSignIn() {
+        signInButton.click();
+    }
+}
+
+# Utils (Base Class)
+
+package utils;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import java.util.concurrent.TimeUnit;
+
+public class BaseClass {
+    public static WebDriver driver;
+
+    public static void initializeDriver() {
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\thala\\Downloads\\chromedriver-win64 (2)\\chromedriver-win64\\chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().window().maximize();
+    }
+
+    public static void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+
